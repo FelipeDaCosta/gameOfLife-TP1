@@ -9,11 +9,34 @@ class MyGdxGame extends Game {
     private var _font: BitmapFont = _
     private var _shape: ShapeRenderer = _
 
+    val util = new Util()
+
+    val gameEngine = new GameEngine {
+        override def shouldRevive(i: Int, j: Int): Boolean = {
+            (!cells(i)(j).isAlive) &&
+                (numberOfNeighborhoodAliveCells(i, j) == 3)
+        }
+
+        override def shouldKeepAlive(i: Int, j: Int): Boolean ={
+            cells(i)(j).isAlive &&
+                (numberOfNeighborhoodAliveCells(i, j) == 2 || numberOfNeighborhoodAliveCells(i, j) == 3)
+        }
+
+        override var height: Int = util.BOARD_HEIGHT
+        override var width: Int = util.BOARD_WIDTH
+
+        override var cells: Array[Array[Cell]] = Array.ofDim[Cell](height, width)
+        this.init()
+
+    }
+
+    val eventHandler = new EventHandler(gameEngine)
+
     override def create(): Unit = {
         batch = new SpriteBatch()
         font = new BitmapFont()
         shape = new ShapeRenderer()
-        this.setScreen(new MainScreen(this)) // Setting main screen
+        this.setScreen(new MainScreen(this, gameEngine, eventHandler)) // Setting main screen
     }
 
     override def render(): Unit = {

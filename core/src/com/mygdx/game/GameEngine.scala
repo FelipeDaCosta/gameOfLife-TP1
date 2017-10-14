@@ -11,10 +11,21 @@ abstract class GameEngine {
 
     var cells: Array[Array[Cell]]
 
+    var auto = false
+    var count = 0
+    var changeGenAuto = 100
+
     def shouldRevive(i: Int, j: Int): Boolean
 
     def shouldKeepAlive(i: Int, j: Int): Boolean
 
+    def init(): Unit = {
+        for(i <- 0 until height) {
+            for(j <- 0 until width) {
+                cells(i)(j) = new Cell()
+            }
+        }
+    }
 
     def nextGeneration(): Unit = {
         val mustRevive = new ListBuffer[Cell]
@@ -44,10 +55,24 @@ abstract class GameEngine {
         i >= 0 && i < height && j >= 0 && j < width
     }
 
+    private def makeValid(i: Int, j: Int): (Int, Int) = {
+        var new_i: Int = i
+        var new_j: Int = j
+
+        if(i < 0) { new_i = height - 1 }
+        else if (i >= height) { new_i = 0 }
+
+        if(j < 0) { new_j = width - 1}
+        else if(j >= width) { new_j = 0}
+
+        (new_i, new_j)
+    }
+
     @throws(classOf[IllegalArgumentException])
     def makeCellAlive(i: Int, j: Int): Unit = {
-        if(valid(i, j)) {
-            cells(i)(j).revive()
+        val (c, d) = makeValid(i, j)
+        if(valid(c, d)) {
+            cells(c)(d).revive()
         } else {
             throw new IllegalArgumentException()
         }
@@ -55,8 +80,9 @@ abstract class GameEngine {
 
     @throws(classOf[IllegalArgumentException])
     def isCellAlive(i: Int, j: Int): Boolean = {
-        if(valid(i, j)) {
-            cells(i)(j).isAlive // Return
+        val (c, d) = makeValid(i, j)
+        if(valid(c, d)) {
+            cells(c)(d).isAlive // Return
         } else {
             throw new IllegalArgumentException
         }
@@ -74,16 +100,26 @@ abstract class GameEngine {
 
     def numberOfNeighborhoodAliveCells(i: Int, j: Int): Int = {
         var alive = 0
-        for(a <- (i - 1 to i + 1)) {
-            for(b <- (j - 1 to j + 1)) {
-                if(valid(a, b)) {
-                    if((a != i || b != j) && cells(a)(b).isAlive) {
-                        alive += 1
-                    }
+        for(a <- i - 1 to i + 1) {
+            for(b <- j - 1 to j + 1) {
+                val (c, d) = makeValid(a, b)
+                if((c != i || d != j) && cells(c)(d).isAlive) {
+                    alive += 1
                 }
             }
         }
         alive // Return
+    }
+
+    // Memento
+
+    def save(): Memento = {
+        val memento = new Memento(cells)
+        memento
+    }
+
+    def setState(memento: Memento): Unit = {
+        this.cells = memento.state.map(_.clone())
     }
 
 }

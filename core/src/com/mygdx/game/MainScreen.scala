@@ -2,35 +2,23 @@ package com.mygdx.game
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
-import com.badlogic.gdx.{Gdx, Input, InputProcessor, Screen}
+import com.badlogic.gdx.{Gdx, Screen}
 
 /**
   * Created by felipecosta on 10/1/17.
   *
   */
-class MainScreen(screenGame: MyGdxGame) extends GameEngine with Screen {
+class MainScreen(screenGame: MyGdxGame, newGameEngine: GameEngine, newEventHandler: EventHandler) extends Screen {
 
     val util = new Util()
-    val screenW = util.WIDTH
-    val screenH = util.HEIGHT
 
-    var height: Int = 20
-    var width: Int = 20
+    val gameEngine = newGameEngine
 
-    var cells: Array[Array[Cell]] = Array.ofDim[Cell](height, width)
-    for(i <- 0 until height) {
-        for(j <- 0 until width) {
-            cells(i)(j) = new Cell()
-        }
-    }
-
-    val squareSizeW: Int = screenW/width
-    val squareSizeH: Int = screenH/height
-    2
+    val eventHandler = newEventHandler
 
     private val game = screenGame
     private val camera = new OrthographicCamera()
-    camera.setToOrtho(false, screenW, screenH)
+    camera.setToOrtho(false, util.SCREEN_WIDTH, util.SCREEN_HEIGHT)
 
     override def hide(): Unit = {}
 
@@ -41,14 +29,17 @@ class MainScreen(screenGame: MyGdxGame) extends GameEngine with Screen {
     override def pause(): Unit = {}
 
     override def render(delta: Float): Unit = {
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            makeCellAlive(Gdx.input.getX()/squareSizeW, (screenH-Gdx.input.getY())/squareSizeH)
-        }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            this.nextGeneration()
-        }
+        eventHandler.listen()
 
+        if(gameEngine.auto) {
+            gameEngine.count += 1
+            if(gameEngine.count >= gameEngine.changeGenAuto) {
+
+                gameEngine.nextGeneration()
+                gameEngine.count = 0
+            }
+        }
 
         Gdx.gl.glClearColor(0.6f, 0.8f, 1, 1)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -58,10 +49,10 @@ class MainScreen(screenGame: MyGdxGame) extends GameEngine with Screen {
 
         game.shape.begin(ShapeType.Line)
         game.shape.setColor(0, 0, 0, 1)
-        for(i <- 0 until height) {
-            for(j <- 0 until width) {
-                if(!isCellAlive(i, j)) {
-                    game.shape.rect(i * squareSizeW, j * squareSizeH, squareSizeW, squareSizeH)
+        for(i <- 0 until gameEngine.height) {
+            for(j <- 0 until gameEngine.width) {
+                if(!gameEngine.isCellAlive(i, j)) {
+                    game.shape.rect(i * util.squareSizeW, j * util.squareSizeH, util.squareSizeW, util.squareSizeH)
                 }
             }
         }
@@ -69,10 +60,10 @@ class MainScreen(screenGame: MyGdxGame) extends GameEngine with Screen {
 
         game.shape.begin(ShapeType.Filled)
         game.shape.setColor(0, 0, 0, 1)
-        for(i <- 0 until height) {
-            for(j <- 0 until width) {
-                if(isCellAlive(i, j)) {
-                    game.shape.rect(i * squareSizeW, j * squareSizeH, squareSizeW, squareSizeH)
+        for(i <- 0 until gameEngine.height) {
+            for(j <- 0 until gameEngine.width) {
+                if(gameEngine.isCellAlive(i, j)) {
+                    game.shape.rect(i * util.squareSizeW, j * util.squareSizeH, util.squareSizeW, util.squareSizeH)
                 }
             }
         }
@@ -82,15 +73,4 @@ class MainScreen(screenGame: MyGdxGame) extends GameEngine with Screen {
     override def show(): Unit = {}
 
     override def resume(): Unit = {}
-
-    override def shouldKeepAlive(i: Int, j: Int): Boolean = {
-        cells(i)(j).isAlive &&
-            (numberOfNeighborhoodAliveCells(i, j) == 2 || numberOfNeighborhoodAliveCells(i, j) == 3)
-    }
-
-    override def shouldRevive(i: Int, j: Int): Boolean = {
-        (!cells(i)(j).isAlive) &&
-            (numberOfNeighborhoodAliveCells(i, j) == 3)
-    }
-
 }
