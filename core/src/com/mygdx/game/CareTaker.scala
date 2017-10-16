@@ -11,15 +11,21 @@ class CareTaker {
     var head = 0
 
     def append(memento: Memento): Unit = {
+        if(head >= SIZE) {
+            for(i <- 0 until SIZE - 1) {
+                mementoList(i) = mementoList(i+1)
+            }
+            head -= 1
+        }
         mementoList(head) = memento
-        head += 1
-        if(head > SIZE - 1) { head = 0 }
+        if(head < SIZE) {
+            head += 1
+        }
+
     }
 
     def prev(): Memento = {
-        head -= 1
-        if(head < 0 ) { head = SIZE - 1 }
-        if(mementoList(head) == null) { head = 0 }
+        if(head > 0) { head -= 1 }
         mementoList(head)
     }
 

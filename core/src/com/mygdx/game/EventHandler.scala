@@ -11,6 +11,7 @@ class EventHandler(newGameEngine: GameEngine) {
     val gameEngine = newGameEngine
     val util = new Util()
     val careTaker = new CareTaker()
+    var buttonClicked = false
 
     def listen(): Unit = {
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -37,9 +38,25 @@ class EventHandler(newGameEngine: GameEngine) {
         }
 
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            gameEngine.makeCellAlive(Gdx.input.getX()/util.squareSizeW,
-                (util.SCREEN_HEIGHT-Gdx.input.getY())/util.squareSizeH)
+            val i = Gdx.input.getX()/util.squareSizeW
+            var j =  (util.SCREEN_HEIGHT-Gdx.input.getY())/util.squareSizeH
+            gameEngine.makeCellAlive(i, j)
         }
 
+        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+            val i = Gdx.input.getX()/util.squareSizeW
+            var j =  (util.SCREEN_HEIGHT-Gdx.input.getY())/util.squareSizeH
+            gameEngine.killCell(i, j)
+        }
+    }
+
+    def printRules(): Unit = {
+        println("Instructions:")
+        println("a - Automatico")
+        println("Space - Proxima Geracao")
+        println("Setas cima/baixo - Aumenta/Diminui velocidade automatico")
+        println("Seta esquerda - Voltar para ger. anterior")
+        println("Mouse Esquerdo - Revive Celula")
+        println("Mouse Direito - Mata Celula")
     }
 }

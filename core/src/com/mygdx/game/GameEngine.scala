@@ -6,10 +6,20 @@ import scala.collection.mutable.ListBuffer
   * Created by felipecosta on 10/1/17.
   */
 abstract class GameEngine {
-    var height: Int
-    var width: Int
+    var nome: String
 
-    var cells: Array[Array[Cell]]
+    val util = new Util()
+
+    var height: Int = util.BOARD_HEIGHT
+    var width: Int = util.BOARD_WIDTH
+
+    var cells: Array[Array[Cell]] = Array.ofDim[Cell](height, width)
+
+    for(i <- 0 until height) {
+        for(j <- 0 until width) {
+            cells(i)(j) = new Cell()
+        }
+    }
 
     var auto = false
     var count = 0
@@ -18,14 +28,6 @@ abstract class GameEngine {
     def shouldRevive(i: Int, j: Int): Boolean
 
     def shouldKeepAlive(i: Int, j: Int): Boolean
-
-    def init(): Unit = {
-        for(i <- 0 until height) {
-            for(j <- 0 until width) {
-                cells(i)(j) = new Cell()
-            }
-        }
-    }
 
     def nextGeneration(): Unit = {
         val mustRevive = new ListBuffer[Cell]
@@ -58,13 +60,19 @@ abstract class GameEngine {
     private def makeValid(i: Int, j: Int): (Int, Int) = {
         var new_i: Int = i
         var new_j: Int = j
+        if (i < 0) {
+            new_i = height - 1
+        }
+        else if (i >= height) {
+            new_i = 0
+        }
 
-        if(i < 0) { new_i = height - 1 }
-        else if (i >= height) { new_i = 0 }
-
-        if(j < 0) { new_j = width - 1}
-        else if(j >= width) { new_j = 0}
-
+        if (j < 0) {
+            new_j = width - 1
+        }
+        else if (j >= width) {
+            new_j = 0
+        }
         (new_i, new_j)
     }
 
@@ -73,6 +81,16 @@ abstract class GameEngine {
         val (c, d) = makeValid(i, j)
         if(valid(c, d)) {
             cells(c)(d).revive()
+        } else {
+            throw new IllegalArgumentException()
+        }
+    }
+
+    @throws(classOf[IllegalArgumentException])
+    def killCell(i: Int, j: Int): Unit = {
+        val (c, d) = makeValid(i, j)
+        if(valid(c, d)) {
+            cells(c)(d).kill()
         } else {
             throw new IllegalArgumentException()
         }

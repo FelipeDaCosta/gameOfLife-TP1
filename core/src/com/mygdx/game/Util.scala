@@ -10,8 +10,8 @@ class Util() {
     val SCREEN_WIDTH = 600
     val SCREEN_HEIGHT = 600
 
-    val BOARD_WIDTH = 5
-    val BOARD_HEIGHT = 5
+    val BOARD_WIDTH = 20
+    val BOARD_HEIGHT = 20
 
     val squareSizeW: Int = SCREEN_WIDTH/BOARD_WIDTH
     val squareSizeH: Int = SCREEN_HEIGHT/BOARD_HEIGHT
