@@ -12,7 +12,7 @@ class MainScreen(screenGame: MyGdxGame, newGameEngine: GameEngine, newEventHandl
 
     val util = new Util()
 
-    val gameEngine = newGameEngine
+    var gameEngine = newGameEngine
 
     val eventHandler = newEventHandler
 
@@ -32,14 +32,6 @@ class MainScreen(screenGame: MyGdxGame, newGameEngine: GameEngine, newEventHandl
 
         eventHandler.listen()
 
-        if(gameEngine.auto) {
-            gameEngine.count += 1
-            if(gameEngine.count >= gameEngine.changeGenAuto) {
-
-                gameEngine.nextGeneration()
-                gameEngine.count = 0
-            }
-        }
 
         Gdx.gl.glClearColor(0.6f, 0.8f, 1, 1)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)

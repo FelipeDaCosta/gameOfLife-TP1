@@ -46,10 +46,12 @@ abstract class GameEngine {
 
         for(cell <- mustRevive) {
             cell.revive()
+            Statistics.recordRevive
         }
 
         for(cell <- mustKill) {
             cell.kill()
+            Statistics.recordKill
         }
     }
 

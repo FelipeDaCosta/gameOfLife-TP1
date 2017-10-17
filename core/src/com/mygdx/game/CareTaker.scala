@@ -1,10 +1,5 @@
 package com.mygdx.game
 
-import scala.collection.mutable
-
-/**
-  * Created by felipecosta on 10/14/17.
-  */
 class CareTaker {
     val SIZE = 10
     var mementoList: Array[Memento] = Array.ofDim[Memento](SIZE)

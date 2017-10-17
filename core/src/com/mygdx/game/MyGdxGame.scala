@@ -3,7 +3,9 @@ package com.mygdx.game
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.g2d.{BitmapFont, SpriteBatch}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import rules._
+import rules.Conway
+import rules.HighLife
+import rules.MyRules
 
 class MyGdxGame extends Game {
     private var _batch: SpriteBatch = _
@@ -11,9 +13,10 @@ class MyGdxGame extends Game {
     private var _shape: ShapeRenderer = _
 
     val util = new Util()
-    val gameEngine = new Conway()
 
+    var gameEngine = new Conway()
 
+    println("Chosen engine: " + gameEngine.nome)
     val eventHandler = new EventHandler(gameEngine)
     eventHandler.printRules()
 
@@ -29,6 +32,7 @@ class MyGdxGame extends Game {
     }
 
     override def dispose(): Unit = {
+        Statistics.display
         this.batch.dispose()
         this.shape.dispose()
         this.font.dispose()

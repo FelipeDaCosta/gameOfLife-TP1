@@ -1,8 +1,5 @@
 package com.mygdx.game
 
-/**
-  * Created by felipecosta on 10/14/17.
-  */
 class Memento(newState: Array[Array[Cell]]) {
     val size = newState.length
     var state: Array[Array[Cell]] = Array.ofDim(size, size)
