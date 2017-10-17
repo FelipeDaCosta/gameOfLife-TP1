@@ -10,7 +10,6 @@ class EventHandler(newGameEngine: GameEngine) {
 
     val gameEngine = newGameEngine
     val util = new Util()
-    val careTaker = new CareTaker()
     var buttonClicked = false
 
     def listen(): Unit = {
@@ -18,7 +17,6 @@ class EventHandler(newGameEngine: GameEngine) {
             if(gameEngine.auto==true){
                 gameEngine.auto=false
             }
-            careTaker.append(gameEngine.save())
             gameEngine.nextGeneration()
         }
 
@@ -44,8 +42,7 @@ class EventHandler(newGameEngine: GameEngine) {
             if(gameEngine.auto==true){
                 gameEngine.auto=false
             }
-            val newMemento = careTaker.prev()
-            if(newMemento != null) { gameEngine.setState(newMemento) }
+            gameEngine.prev()
         }
 
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {

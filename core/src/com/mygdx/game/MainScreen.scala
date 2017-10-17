@@ -42,7 +42,6 @@ class MainScreen(screenGame: MyGdxGame, newGameEngine: GameEngine, newEventHandl
         if(gameEngine.auto) {
             gameEngine.count += 1
             if(gameEngine.count >= gameEngine.changeGenAuto) {
-                newEventHandler.careTaker.append(gameEngine.save())
                 gameEngine.nextGeneration()
                 gameEngine.count = 0
             }

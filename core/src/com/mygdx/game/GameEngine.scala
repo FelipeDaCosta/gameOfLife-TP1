@@ -9,6 +9,7 @@ abstract class GameEngine {
     var nome: String
 
     val util = new Util()
+    val careTaker = new CareTaker()
 
     var height: Int = util.BOARD_HEIGHT
     var width: Int = util.BOARD_WIDTH
@@ -32,6 +33,8 @@ abstract class GameEngine {
     def nextGeneration(): Unit = {
         val mustRevive = new ListBuffer[Cell]
         val mustKill = new ListBuffer[Cell]
+
+        save() //Saving memento before changing state
 
         for(i <- 0 until height) {
             for(j <- 0 until width) {
@@ -128,12 +131,16 @@ abstract class GameEngine {
 
     // Memento
 
-    def save(): Memento = {
+    private def save(): Unit = {
         val memento = new Memento(cells)
-        memento
+        careTaker.append(memento)
     }
 
-    def setState(memento: Memento): Unit = {
-        this.cells = memento.getState.map(_.clone())
+    def prev(): Unit = {
+        val newMemento = careTaker.prev()
+        if(newMemento != null) {
+            this.cells = newMemento.getState.map(_.clone())
+        }
     }
+
 }
