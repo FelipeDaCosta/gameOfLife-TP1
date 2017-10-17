@@ -14,7 +14,10 @@ class EventHandler(newGameEngine: GameEngine) {
     var buttonClicked = false
 
     def listen(): Unit = {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) ) {
+            if(gameEngine.auto==true){
+                gameEngine.auto=false
+            }
             careTaker.append(gameEngine.save())
             gameEngine.nextGeneration()
         }
@@ -22,18 +25,26 @@ class EventHandler(newGameEngine: GameEngine) {
         if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             gameEngine.auto = !gameEngine.auto
         }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            if(gameEngine.auto==true){
+                gameEngine.auto=false
+            }
+            gameEngine.killAllCells()
+        }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if(gameEngine.changeGenAuto < 1000) gameEngine.changeGenAuto += 30
+            if(gameEngine.changeGenAuto < 100) gameEngine.changeGenAuto += 10
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if(gameEngine.changeGenAuto > 50) gameEngine.changeGenAuto -= 30
+            if(gameEngine.changeGenAuto >10) gameEngine.changeGenAuto -= 10
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            if(gameEngine.auto==true){
+                gameEngine.auto=false
+            }
             val newMemento = careTaker.prev()
-
             if(newMemento != null) { gameEngine.setState(newMemento) }
         }
 
@@ -54,9 +65,11 @@ class EventHandler(newGameEngine: GameEngine) {
     def printRules(): Unit = {
         println("Instructions:")
         println("a - Automatico")
+        println("c - Matar todas as células vivas")
         println("Space - Proxima Geracao")
         println("Setas cima/baixo - Aumenta/Diminui velocidade automatico")
         println("Seta esquerda - Voltar para ger. anterior")
+        println("Seta direita - Ir para ger. posterior")
         println("Mouse Esquerdo - Revive Celula")
         println("Mouse Direito - Mata Celula")
     }

@@ -23,7 +23,7 @@ abstract class GameEngine {
 
     var auto = false
     var count = 0
-    var changeGenAuto = 50
+    var changeGenAuto = 55
 
     def shouldRevive(i: Int, j: Int): Boolean
 
@@ -95,6 +95,14 @@ abstract class GameEngine {
         }
     }
 
+    def killAllCells(): Unit ={
+        for(i <- 0 until height) {
+            for(j <- 0 until width) {
+                if(isCellAlive(i, j)) { killCell(i,j) }
+            }
+        }
+    }
+
     def numberOfAliveCells: Int = {
         var aliveCells = 0
         for(i <- 0 until height) {
@@ -128,5 +136,4 @@ abstract class GameEngine {
     def setState(memento: Memento): Unit = {
         this.cells = memento.getState.map(_.clone())
     }
-
 }
