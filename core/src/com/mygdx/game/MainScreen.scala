@@ -39,6 +39,15 @@ class MainScreen(screenGame: MyGdxGame, newGameEngine: GameEngine, newEventHandl
         camera.update()
         game.shape.setProjectionMatrix(camera.combined)
 
+        if(gameEngine.auto) {
+            gameEngine.count += 1
+            if(gameEngine.count >= gameEngine.changeGenAuto) {
+                newEventHandler.careTaker.append(gameEngine.save())
+                gameEngine.nextGeneration()
+                gameEngine.count = 0
+            }
+        }
+
         game.shape.begin(ShapeType.Line)
         game.shape.setColor(0, 0, 0, 1)
         for(i <- 0 until gameEngine.height) {

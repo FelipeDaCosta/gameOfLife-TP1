@@ -49,14 +49,6 @@ class EventHandler(newGameEngine: GameEngine) {
             gameEngine.killCell(i, j)
         }
 
-        if(gameEngine.auto) {
-            gameEngine.count += 1
-            if(gameEngine.count >= gameEngine.changeGenAuto) {
-                careTaker.append(gameEngine.save())
-                gameEngine.nextGeneration()
-                gameEngine.count = 0
-            }
-        }
     }
 
     def printRules(): Unit = {

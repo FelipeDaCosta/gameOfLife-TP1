@@ -23,7 +23,7 @@ abstract class GameEngine {
 
     var auto = false
     var count = 0
-    var changeGenAuto = 100
+    var changeGenAuto = 50
 
     def shouldRevive(i: Int, j: Int): Boolean
 
@@ -60,21 +60,8 @@ abstract class GameEngine {
     }
 
     private def makeValid(i: Int, j: Int): (Int, Int) = {
-        var new_i: Int = i
-        var new_j: Int = j
-        if (i < 0) {
-            new_i = height - 1
-        }
-        else if (i >= height) {
-            new_i = 0
-        }
-
-        if (j < 0) {
-            new_j = width - 1
-        }
-        else if (j >= width) {
-            new_j = 0
-        }
+        var new_i: Int = (height + i)%height
+        var new_j: Int = (width + j)%width
         (new_i, new_j)
     }
 
@@ -139,7 +126,7 @@ abstract class GameEngine {
     }
 
     def setState(memento: Memento): Unit = {
-        this.cells = memento.state.map(_.clone())
+        this.cells = memento.getState.map(_.clone())
     }
 
 }

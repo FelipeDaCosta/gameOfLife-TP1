@@ -1,7 +1,7 @@
 package com.mygdx.game
 
 class CareTaker {
-    val SIZE = 10
+    val SIZE = 100
     var mementoList: Array[Memento] = Array.ofDim[Memento](SIZE)
     var head = 0
 
