@@ -24,7 +24,7 @@ abstract class GameEngine {
 
     var auto = false
     var count = 0
-    var changeGenAuto = 55
+    var changeGenAuto = 50
 
     def shouldRevive(i: Int, j: Int): Boolean
 
@@ -136,7 +136,7 @@ abstract class GameEngine {
         careTaker.append(memento)
     }
 
-    def prev(): Unit = {
+    def prevGeneration(): Unit = {
         val newMemento = careTaker.prev()
         if(newMemento != null) {
             this.cells = newMemento.getState.map(_.clone())

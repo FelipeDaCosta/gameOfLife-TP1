@@ -31,18 +31,18 @@ class EventHandler(newGameEngine: GameEngine) {
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if(gameEngine.changeGenAuto < 100) gameEngine.changeGenAuto += 10
+            if(gameEngine.changeGenAuto < 100) gameEngine.changeGenAuto += 5
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if(gameEngine.changeGenAuto >10) gameEngine.changeGenAuto -= 10
+            if(gameEngine.changeGenAuto >5) gameEngine.changeGenAuto -= 5
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             if(gameEngine.auto==true){
                 gameEngine.auto=false
             }
-            gameEngine.prev()
+            gameEngine.prevGeneration()
         }
 
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
